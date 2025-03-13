@@ -54,10 +54,8 @@ pipeline = transformers.pipeline(
     task="summarization",
     model=undisputed_best_model,
     tokenizer=tokenizer,
+    device=-1 if not gpu else 0
 )
-if gpu:
-    import torch
-    pipeline.to(torch.device("cuda"))
 pipeline.model.config.decoder_start_token_id = tokenizer.lang_code_to_id[
     "nl_XX"
 ]
