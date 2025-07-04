@@ -15,7 +15,7 @@ def getreadme():
 
 setup(
     name = "sumservice",
-    version = "0.1.1", #make sure SYSTEM_VERSION in your service configuration is set to the same value!
+    version = "0.2.0", #make sure SYSTEM_VERSION in your service configuration is set to the same value!
     author = "Maarten van gompel", #adapt this
     description = ("Summarisation service"),
     license = "GPL-3.0-or-later",
