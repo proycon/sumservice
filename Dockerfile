@@ -27,10 +27,10 @@ ENV HF_TOKEN=""
 #^-- Set to your huggingface token
 
 # Install all global dependencies
-RUN apt-get update && apt-get install -y --no-install-recommends runit curl ca-certificates nginx uwsgi uwsgi-plugin-python3 python3-pip python3-yaml python3-lxml python3-requests ffmpeg zip git
+RUN apt-get update && apt-get install -y --no-install-recommends runit curl ca-certificates nginx uwsgi uwsgi-plugin-python3 python3-pip python3-yaml python3-lxml python3-requests zip git gcc python3-dev && rm -rf /var/lib/apt/lists/*
 
 # Prepare environment
-RUN mkdir -p /etc/service/nginx /etc/service/uwsgi /var/www/.cache /var/www/.config && chown www-data:www-data /var/www/.cache /var/www/.config
+RUN mkdir -p /etc/service/nginx /etc/service/uwsgi /var/www/.cache /var/www/.config /var/www/.triton && chown www-data:www-data /var/www/.cache /var/www/.config /var/www/.triton
 
 # Patch to set proper mimetype for CLAM's logs; maximum upload size
 RUN sed -i 's/txt;/txt log;/' /etc/nginx/mime.types &&\
@@ -45,6 +45,7 @@ ENV XDG_CACHE_DIR=/var/www/.cache
 ENV XDG_CONFIG_DIR=/var/www/.cache
 ENV TRANSFORMERS_CACHE=/var/www/.cache
 ENV HF_HOME=/var/www/.cache
+ENV CACHE_DIR=/var/www/.cache
 
 # Configure webserver and uwsgi server
 RUN cp /usr/src/webservice/runit.d/nginx.run.sh /etc/service/nginx/run &&\
@@ -55,10 +56,7 @@ RUN cp /usr/src/webservice/runit.d/nginx.run.sh /etc/service/nginx/run &&\
     chmod a+x /etc/sumservice.wsgi &&\
     cp -f /usr/src/webservice/sumservice.nginx.conf /etc/nginx/sites-enabled/default
 
-# Install dependencies
-RUN pip install --break-system-packages torch sentencepiece transformers 
-
-# Install the the service itself
+# Install the webservice service and dependencies 
 RUN cd /usr/src/webservice && pip install --break-system-packages . && rm -Rf /usr/src/webservice /root/.cache
 RUN ln -s /usr/local/lib/python3.*/dist-packages/clam /opt/clam
 

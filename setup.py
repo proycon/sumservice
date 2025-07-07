@@ -40,5 +40,5 @@ setup(
     ],
     package_data = {'sumservice':['*.wsgi','*.yml','*.sh'] },
     include_package_data=True,
-    install_requires=['CLAM >= 3.2', 'torch','sentencepiece','transformers']
+    install_requires=['CLAM >= 3.2', 'atrium-summarize @ git+https://github.com/Aditya3107/ATRIUM_summarization@v0.1']
 )

@@ -7,7 +7,7 @@
 
 #Consult the CLAM documentation at https://clam.readthedocs.io/
 
-from clam.common.parameters import ChoiceParameter, BooleanParameter, StaticParameter
+from clam.common.parameters import ChoiceParameter, BooleanParameter, StaticParameter, StringParameter
 from clam.common.formats import PlainTextFormat
 from clam.common.data import InputTemplate, OutputTemplate, Profile, SetMetaField, loadconfig
 from clam.common.digestauth import pwhash
@@ -39,13 +39,13 @@ SYSTEM_VERSION = "0.2.0"
 
 #The author(s) of the underlying tool and/or this CLAM wrapper
 #(If you can derive this dynamically then that is strongly recommended!)
-SYSTEM_AUTHOR = "Maarten van Gompel"
+SYSTEM_AUTHOR = "Aditya Parikh, Maarten van Gompel"
 
 #How to reach the authors?
-SYSTEM_EMAIL = "proycon@anaproy.nl"
+SYSTEM_EMAIL = "aditya.parikh@ru.nl, proycon@anaproy.nl"
 
 #Does this system have a homepage (or possibly a source repository otherwise)
-#SYSTEM_URL = ""
+SYSTEM_URL = "https://github.com/proycon/sumservice"
 
 #Is this webservice embedded in a larger system? Like part of an institution or particular portal site. If so, mention the URL here.
 #SYSTEM_PARENT_URL = ""
@@ -122,14 +122,14 @@ PROFILES = [
         InputTemplate('InputTextfile',PlainTextFormat,"Plain text file",
             StaticParameter(id='encoding',name='Encoding',description='The character encoding of the file', value='utf-8'),
             extension='.txt',
-            multi=True #set unique=True if the user may only upload a file for this input template once. Set multi=True if you the user may upload multiple of such files
+            multi=False #set unique=True if the user may only upload a file for this input template once. Set multi=True if you the user may upload multiple of such files
         ),
         #------------------------------------------------------------------------------------------------------------------------
         OutputTemplate('Summary',PlainTextFormat,'Plain text file',
             SetMetaField('encoding','utf-8'),
             removeextension=".txt",
             extension='.summary.txt',
-            multi=True
+            multi=False
         ),
     )
 ]
@@ -157,7 +157,7 @@ PROFILES = [
 #                        (set to "anonymous" if there is none)
 #     $PARAMETERS      - List of chosen parameters, using the specified flags
 #
-COMMAND = WEBSERVICEDIR + "/sumservice_wrapper.py $DATAFILE $STATUSFILE $OUTPUTDIRECTORY"
+COMMAND = WEBSERVICEDIR + f"/sumservice_wrapper.sh $STATUSFILE $INPUTDIRECTORY $OUTPUTDIRECTORY $PARAMETERS"
 
 #Or if you only use the action paradigm, set COMMAND = None
 
@@ -169,7 +169,7 @@ COMMAND = WEBSERVICEDIR + "/sumservice_wrapper.py $DATAFILE $STATUSFILE $OUTPUTD
 
 PARAMETERS =  [
     ('Global', [
-        BooleanParameter(id='gpu',name="GPU", description="Use GPU (improves performance but may not always be available)",default=True),
-        ChoiceParameter(id='language',name='Language',description='The language of the input texts and output summaries', choices=[ ('nl','Dutch  / Nederlands')],default='nl'),
+        ChoiceParameter(id='language',name='Language',description='The language of the input texts and output summaries', choices=[ ('en', 'English')],default='en',paramflag='-l'),
+        #StringParameter(id='introprompt',name='Intro Prompt',description='An initial one-line summary of the interview to insert into the prompt', paramflag='-p')
     ])
 ]
