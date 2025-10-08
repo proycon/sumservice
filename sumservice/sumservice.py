@@ -7,7 +7,7 @@
 
 #Consult the CLAM documentation at https://clam.readthedocs.io/
 
-from clam.common.parameters import ChoiceParameter, BooleanParameter, StaticParameter, StringParameter
+from clam.common.parameters import ChoiceParameter, BooleanParameter, StaticParameter, StringParameter, IntegerParameter
 from clam.common.formats import PlainTextFormat
 from clam.common.data import InputTemplate, OutputTemplate, Profile, SetMetaField, loadconfig
 from clam.common.digestauth import pwhash
@@ -169,7 +169,7 @@ COMMAND = WEBSERVICEDIR + f"/sumservice_wrapper.sh $STATUSFILE $INPUTDIRECTORY $
 
 PARAMETERS =  [
     ('Global', [
-        ChoiceParameter(id='language',name='Language',description='The language of the input texts and output summaries', choices=[ ('en', 'English')],default='en',paramflag='-l'),
-        #StringParameter(id='introprompt',name='Intro Prompt',description='An initial one-line summary of the interview to insert into the prompt', paramflag='-p')
+        ChoiceParameter(id='language',name='Language',description='The language of the input texts and output summaries', choices=[ ('auto', 'Automatic detection'), ('Czech', 'Czech'), ('Danish','Danish'),('Dutch', 'Dutch'), ('English', 'English'), ('Finnish', 'Finnish'), ('French', 'French'), ('German', 'German'), ('Greek', 'Greek'), ('Hindi', 'Hindi'),('Hungarian','Hungarian'), ('Italian', 'Italian'),('Norwegian','Norwegian'),('Polish', 'Polish'),('Portuguese', 'Portuguese'), ('Romanian', 'Romanian'), ('Spanish', 'Spanish'), ('Swedish', 'Swedish'), ('Turkish', 'Turkish')],default='auto',paramflag='-l'),
+        IntegerParameter(id='words', name='Words', description="Maximum summary size in number of words", default=500, paramflag='-w') 
     ])
 ]

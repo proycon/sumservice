@@ -18,11 +18,16 @@ if [ -z "$HF_TOKEN" ]; then
     exit 1
 fi
 
-while getopts "l:p:" arg; do
+WORDS=500
+while getopts "l:w:p:" arg; do
     case $arg in
         l)
-            #for future use
-            TARGETLANG=$OPTARG
+            if [ "$OPTARG" != "auto" ]; then
+                EXTRA_ARG=--force-language $OPTARG
+            fi
+            ;;
+        w)
+            WORDS=$OPTARG
             ;;
         *)
             echo "Invalid option">&2
@@ -37,13 +42,13 @@ INPUT_FILE=$(ls "$INPUT_DIR" | head -n 1)
 if summarize-interviews \
     --model-name deepseek-ai/DeepSeek-R1-Distill-Llama-8B \
     --srt-file "$INPUT_DIR/$INPUT_FILE" \
-    --summary-words 1000 \
+    --summary-words "$WORDS" \
     --intro-prompt "$INTRO_PROMPT" \
     --use-gpu yes \
     --device-id 0 \
     --cache-dir "$CACHE_DIR" \
     --output-dir "$OUTPUT_DIR" \
-    --hf-token "$HF_TOKEN"; then
+    --hf-token "$HF_TOKEN" $EXTRA_ARG; then
     echo "Done." > "$STATUS_FILE"
     exit 0
 else
