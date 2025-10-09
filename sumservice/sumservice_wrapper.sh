@@ -43,7 +43,6 @@ if summarize-interviews \
     --model-name deepseek-ai/DeepSeek-R1-Distill-Llama-8B \
     --srt-file "$INPUT_DIR/$INPUT_FILE" \
     --summary-words "$WORDS" \
-    --intro-prompt "$INTRO_PROMPT" \
     --use-gpu yes \
     --device-id 0 \
     --cache-dir "$CACHE_DIR" \
