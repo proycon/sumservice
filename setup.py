@@ -15,7 +15,7 @@ def getreadme():
 
 setup(
     name = "sumservice",
-    version = "0.3.1", #make sure SYSTEM_VERSION in your service configuration is set to the same value!
+    version = "0.3.2", #make sure SYSTEM_VERSION in your service configuration is set to the same value!
     author = "Maarten van gompel", #adapt this
     description = ("Summarisation service"),
     license = "GPL-3.0-or-later",
@@ -40,5 +40,5 @@ setup(
     ],
     package_data = {'sumservice':['*.wsgi','*.yml','*.sh'] },
     include_package_data=True,
-    install_requires=['CLAM >= 3.2', 'atrium-summarize @ git+https://github.com/Aditya3107/ATRIUM_summarization@v0.2.1']
+    install_requires=['CLAM >= 3.2', 'atrium-summarize @ git+https://github.com/Aditya3107/ATRIUM_summarization@v0.2.2']
 )
