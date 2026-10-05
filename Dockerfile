@@ -1,7 +1,7 @@
-FROM nvidia/cuda:12.6.3-base-ubuntu24.04
+FROM nvidia/cuda:12.9.2-base-ubuntu24.04
 
 LABEL org.opencontainers.image.authors="Maarten van Gompel <proycon@anaproy.nl>"
-LABEL description="Summarisation service" 
+LABEL description="Summarisation service"
 
 ENV UWSGI_PROCESSES=2
 ENV UWSGI_THREADS=2
