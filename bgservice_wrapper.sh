@@ -5,4 +5,4 @@
 if [ -d env ]; then
     . env/bin/activate
 fi
-exec atrium_summarize --server "$@"
+exec summarize-interviews --server "$@"

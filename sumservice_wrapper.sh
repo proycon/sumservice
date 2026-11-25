@@ -1,10 +1,11 @@
 #!/bin/sh
 
 outputdir=$(realpath .)
+tokenthreshold=4000
+#^-- if exceeded, chunking will be used
 maxwords=500
 maxchunkwords=250
 language=auto
-port=11001
 
 while getopts "L:W:p:" opt; do
     case $opt in
@@ -33,7 +34,7 @@ fi
 
 for f in "$@"; do
     f="$(realpath "$f")"
-    printf "%s\t%s\t%s\t%s\t%s\n"  "$f" "$outputdir" "$language" "$maxwords" "$maxchunkwords" | nc localhost "$port" >&2
+    printf "%s\t%s\t%s\t%s\t%s\t%s\n"  "$f" "$outputdir" "$language" "$tokenthreshold" "$maxwords" "$maxchunkwords" | nc localhost "$port" >&2
 done
 
 echo "Done...">&2

@@ -3,7 +3,7 @@
 #      this file is still a template that needs to be passed through envsubst first before being accepted by CLAM.
 
 name = "Summarisation Service"
-description = "This webservice allows you to automatically summarise texts with speaker information, it supports a variety of languages and is powered by an LLM"
+description = "This webservice allows you to automatically summarise interviews (e.g. with speaker information), it supports a variety of languages and is powered by an LLM"
 authors = [ "Maarten van Gompel", "Aditya Parikh" ]
 affiliation = "CLST, Radboud University"
 termsofservice = "$CLAM_TERMS_OF_SERVICE"
