@@ -1,0 +1,198 @@
+
+#Note: Certain values in this TOML reference environment variables. If you see such variables (dollar syntax), it means
+#      this file is still a template that needs to be passed through envsubst first before being accepted by CLAM.
+
+name = "Summarisation Service"
+description = "This webservice allows you to automatically summarise texts with speaker information, it supports a variety of languages and is powered by an LLM"
+authors = [ "Maarten van Gompel", "Aditya Parikh" ]
+affiliation = "CLST, Radboud University"
+termsofservice = "$CLAM_TERMS_OF_SERVICE"
+listen = "$CLAM_LISTEN"
+#url is required if oauth is enabled, it must not have a trailing slash
+url = "$CLAM_URL"
+rootdir = "$CLAM_ROOT"
+version = "0.3"
+
+[license]
+name = "GNU Affero General Public License"
+id = "AGPL-3.0-only"
+url = "https://www.gnu.org/licenses/agpl-3.0.en.html"
+
+[contact]
+name = "Maarten van Gompel"
+url = "https://proycon.anaproy.nl"
+email = "proycon@anaproy.nl"
+
+[auth]
+user_file = "$CLAM_USER_FILE"
+salt = "$CLAM_SALT"
+oauth_config_file = "$CLAM_OIDC_CONFIG_FILE"
+
+[[filetypes]]
+id = "txt"
+name = "Plain Text (UTF-8)"
+contenttype = "text/plain; charset=utf-8"
+
+[[filetypes]]
+id = "srt"
+name = "SubRip Text"
+contenttype = "application/x-subrip"
+
+#---------------------------------------------------------------------------------
+
+[[background_services]]
+id = "bgservice"
+description = "Summarisation server (LLM based)"
+command = "./bgservice_wrapper.sh"
+#first argument is the port to listen on
+args = [ "11001" ]
+unload_time = 120
+up_pattern = "READY.*" #the server sends this if it's ready to receive connections
+
+
+#---------------------------------------------------------------------------------
+
+[[endpoints]]
+name = "landingpage"
+path = "/"
+mode = "LandingPage"
+public = true
+
+#----------------------------------- DUTCH ASR ----------------------------------------------
+
+[[endpoints]]
+name = "Summarisation service"
+description = "Summarises a text"
+path = "/"  #project name will be appended automatically
+mode = "Project"
+background_services = [ "bgservice" ]
+status_pattern = ".*" #every line from stderr qualifies as a status message
+command = "./sumservice_wrapper.sh"
+args = [ "-p", "11001" ]
+#automatically add arguments from the defined parameters on top of args
+auto_add_args = true
+public = false
+
+[[endpoints.parameters]]
+id = "language"
+name = "Language"
+description = "Language of the input. Configuring this may improve the accuracy of the summary."
+required = false
+flag = "-L"
+
+[endpoints.parameters.type]
+parametertype = "Selection"
+default = [ "auto" ]
+
+[[endpoints.parameters.type.choices]]
+id = "auto"
+label = "Automatic detection"
+
+[[endpoints.parameters.type.choices]]
+id = "cs"
+label = "Czech"
+
+[[endpoints.parameters.type.choices]]
+id = "da"
+label = "Danish"
+
+[[endpoints.parameters.type.choices]]
+id = "en"
+label = "English"
+
+[[endpoints.parameters.type.choices]]
+id = "nl"
+label = "Dutch"
+
+[[endpoints.parameters.type.choices]]
+id = "de"
+label = "German"
+
+[[endpoints.parameters.type.choices]]
+id = "el"
+label = "Greek"
+
+[[endpoints.parameters.type.choices]]
+id = "fi"
+label = "Finnish"
+
+[[endpoints.parameters.type.choices]]
+id = "fr"
+label = "French"
+
+[[endpoints.parameters.type.choices]]
+id = "hi"
+label = "Hindi"
+
+[[endpoints.parameters.type.choices]]
+id = "hu"
+label = "Hungarian"
+
+[[endpoints.parameters.type.choices]]
+id = "it"
+label = "Italian"
+
+[[endpoints.parameters.type.choices]]
+id = "no"
+label = "Norwegian"
+
+[[endpoints.parameters.type.choices]]
+id = "pl"
+label = "Polish"
+
+[[endpoints.parameters.type.choices]]
+id = "pt"
+label = "Portuguese"
+
+[[endpoints.parameters.type.choices]]
+id = "ro"
+label = "Romanian"
+
+[[endpoints.parameters.type.choices]]
+id = "ru"
+label = "Russiah"
+
+[[endpoints.parameters.type.choices]]
+id = "es"
+label = "Spanish"
+
+[[endpoints.parameters.type.choices]]
+id = "sv"
+label = "Swedish"
+
+[[endpoints.parameters.type.choices]]
+id = "tr"
+label = "Turkish"
+
+[[endpoints.parameters.type.choices]]
+id = "uk"
+label = "Ukrainian"
+
+[[endpoints.parameters]]
+id = "maxwords"
+name = "Maximum words"
+description = "Maximum amount of words in the summary"
+required = false
+type = { parametertype = "Int", default = 500 }
+flag = "-W"
+
+[[endpoints.parameters]]
+id = "inputtxt"
+name = "Input text (Text)"
+description = "Input file"
+required = false
+type = { parametertype = "File", filetype = "txt", filename = { nametype = "Pattern", value = "\\.txt$" } }
+multiple = true
+
+[[endpoints.parameters]]
+id = "inputsrt"
+name = "Input text (SubRip)"
+description = "Input file"
+required = false
+type = { parametertype = "File", filetype = "srt", filename = { nametype = "Pattern", value = "\\.srt$" } }
+multiple = true
+
+[[endpoints.outputfiles]]
+name = "Summary"
+type = "txt"
+filename = { nametype = "Pattern", value = "\\.summary.txt$" }

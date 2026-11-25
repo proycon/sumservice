@@ -1,5 +1,0 @@
-include README*
-include sumservice/*.py
-include sumservice/*.sh
-include sumservice/*.wsgi
-include sumservice/*.yml
