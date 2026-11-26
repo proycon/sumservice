@@ -6,12 +6,13 @@ tokenthreshold=4000
 maxwords=500
 maxchunkwords=250
 language=auto
+port=11001
 
 while getopts "L:W:p:" opt; do
     case $opt in
         L) language=$OPTARG ;;
         W) maxwords=$OPTARG ;;
-        p) maxwords=$OPTARG ;;
+        p) port=$OPTARG ;;
         :) printf 'Option -%s requires an argument\n' "$OPTARG" >&2;
            exit 2 ;;
         *) printf 'Invalid option %s' "$OPT" >&2; exit 2 ;;
